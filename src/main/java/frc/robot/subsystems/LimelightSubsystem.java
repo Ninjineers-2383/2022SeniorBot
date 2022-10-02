@@ -21,12 +21,6 @@ public class LimelightSubsystem extends SubsystemBase {
     // Whether or not the limelight is locked on
     private boolean lockedOn;
 
-    // Whether or not the turret is supposed to seek
-    private boolean turretSeek;
-
-    // The turret power based on the limelight
-    private double turretPower;
-
     // The x value of the target
     private double targetX;
 
@@ -41,9 +35,6 @@ public class LimelightSubsystem extends SubsystemBase {
 
         targetVisible = false;
         lockedOn = false;
-        turretSeek = false;
-
-        turretPower = 0.0;
 
         camera.setPipelineIndex(0); // Set the pipeline to 0, make sure the comp pipeline is the first pipeline
     }
@@ -130,41 +121,5 @@ public class LimelightSubsystem extends SubsystemBase {
      */
     public boolean getLockedOn() {
         return lockedOn;
-    }
-
-    /**
-     * Sets the turret power
-     * 
-     * @param turretPower the turret power
-     */
-    public void setTurretPower(double turretPower) {
-        this.turretPower = turretPower;
-    }
-
-    /**
-     * Gets the turret power
-     * 
-     * @return the turret power
-     */
-    public double getTurretPower() {
-        return turretPower;
-    }
-
-    /**
-     * Sets whether or not the turret should seek
-     * 
-     * @param whether or not the turret should seek
-     */
-    public void setTurretSeek(boolean turretSeek) {
-        this.turretSeek = turretSeek;
-    }
-
-    /**
-     * Gets whether or not the turret is seeking
-     * 
-     * @return whether or not the turret is seeking
-     */
-    public boolean getTurretSeek() {
-        return turretSeek;
     }
 }

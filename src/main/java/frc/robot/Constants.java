@@ -121,4 +121,9 @@ public final class Constants {
     public final static class Chimney {
         public final static int PORT = 9;
     }
+
+    public final static class LimelightDrive {
+        public final static double MAX_OUTPUT = 4.0;
+        public final static double TURN_SPEED_AMPLIFIER = 4.0;
+    }
 }
