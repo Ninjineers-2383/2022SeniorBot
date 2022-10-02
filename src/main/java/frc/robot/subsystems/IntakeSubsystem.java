@@ -13,8 +13,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final VictorSPX intakeMotor;
 
     // creates two solenoid instances
-    private final Solenoid upSolenoid;
-    private final Solenoid downSolenoid;
+    private final Solenoid Solenoid;
 
     // creates an instance of the compressor command
     private final CompressorCommand compressorCommand;
@@ -30,8 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(CompressorSubsystem compressor, int motorPort, int upSolenoidPort, int downSolenoidPort) {
         this.compressorCommand = new CompressorCommand(compressor);
         intakeMotor = new VictorSPX(motorPort);
-        upSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, upSolenoidPort);
-        downSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, downSolenoidPort);
+        Solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, upSolenoidPort);
 
         intakeMotor.setInverted(false);
     }
@@ -51,8 +49,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param down true sets the intake down, false sets the intake up
      */
     public void setDown(Boolean down) {
-        upSolenoid.set(down);
-        downSolenoid.set(!down);
+        Solenoid.set(down);
         if (down) {
             compressorCommand.useCompressor();
         } else {
@@ -66,7 +63,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return whether or not the intake is up
      */
     public boolean getUp() {
-        boolean front = !upSolenoid.get();
+        boolean front = !Solenoid.get();
         return front;
     }
 
@@ -76,6 +73,6 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return whether or not the intake is down
      */
     public boolean getDown() {
-        return !upSolenoid.get();
+        return !Solenoid.get();
     }
 }

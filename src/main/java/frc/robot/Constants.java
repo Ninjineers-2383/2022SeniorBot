@@ -110,7 +110,7 @@ public final class Constants {
     public final static class Intake {
         // solenoid ports on pcm
         public final static int LEFT_SOLENOID_PORT = 1;
-        public final static int FRONT_RIGHT_SOLENOID_PORT = 0;
+        public final static int RIGHT_SOLENOID_PORT = 0;
         public final static int INTAKE_PORT = 3;
     }
 

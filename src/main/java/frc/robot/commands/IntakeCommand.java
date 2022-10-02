@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -10,7 +11,7 @@ public class IntakeCommand extends CommandBase {
 
     private final IntakeSubsystem intake;
     private DoubleSupplier power;
-    private boolean down;
+    private BooleanSupplier down;
 
     // Creates a command that takes in a subsystem and speed and runs specific
     // actions created in the subsystem.
@@ -24,7 +25,7 @@ public class IntakeCommand extends CommandBase {
      * @param power  the power of the intake motors
      * @param down   whether or not the intakes are down
      */
-    public IntakeCommand(IntakeSubsystem intake, DoubleSupplier power, boolean down) {
+    public IntakeCommand(IntakeSubsystem intake, DoubleSupplier power, BooleanSupplier down) {
         this.intake = intake;
         this.power = power;
         this.down = down;
@@ -34,7 +35,7 @@ public class IntakeCommand extends CommandBase {
     // Called once when the command gets scheduled
     @Override
     public void initialize() {
-        intake.setDown(down);
+        intake.setDown(down.getAsBoolean());
     }
 
     // Called every time the scheduler runs while the command is scheduled.
