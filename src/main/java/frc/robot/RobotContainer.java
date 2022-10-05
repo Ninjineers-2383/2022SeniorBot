@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Intake;
 import frc.robot.Constants.Launcher;
@@ -54,6 +55,9 @@ public class RobotContainer {
     // !(m_driverMoveController.getTrigger()
     // || m_driverTurnController.getTrigger());
     private final BooleanSupplier m_fieldCentric = () -> false;
+    // private final BooleanSupplier m_fieldCentric = () -> !(m_driverMoveController.getTrigger()
+    //         || m_driverTurnController.getTrigger());
+    // private final BooleanSupplier m_fieldCentric = () -> false;
 
     // The robot's subsystems and commands are defined here...
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(DataLogManager.getLog());

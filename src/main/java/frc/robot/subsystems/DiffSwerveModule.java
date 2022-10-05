@@ -102,6 +102,8 @@ public class DiffSwerveModule implements Sendable {
     private double m_driveOutput;
     private double m_turnOutput;
 
+    private int i = 0;
+
     /**
      * Creates a new DiffSwerveModule.
      * 
@@ -195,6 +197,11 @@ public class DiffSwerveModule implements Sendable {
 
         m_wheelSpeed.append(m_driveSpeed);
         m_moduleAngleLog.append(m_moduleAngle);
+
+        if (i < 10) {
+            m_encoder.reset();
+            i++;
+        }
 
         return new SwerveModuleState(m_driveSpeed, Rotation2d.fromDegrees(m_moduleAngle));
     }
@@ -356,11 +363,18 @@ public class DiffSwerveModule implements Sendable {
             return m_moduleAngle;
         }, null);
 
+        builder.addDoubleProperty("Encoder Zero Offset", () -> {
+            return m_encoder.getZeroOffset();
+        }, null);
+
         builder.addDoubleProperty("Raw Quad", () -> {
             return m_encoder.getRawQuad();
         }, null);
         builder.addDoubleProperty("Raw Abs", () -> {
             return m_encoder.getRawAbs();
+        }, null);
+        builder.addDoubleProperty("Abs Distance", () -> {
+            return m_encoder.getAbsDistance();
         }, null);
 
         builder.addDoubleProperty("Drive Output", () -> {
