@@ -1,5 +1,6 @@
 package frc.robot.helpers;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
@@ -11,7 +12,7 @@ public class DoubleEncoder {
     private final DutyCycleEncoder absEncoder;
     private final DutyCycleEncoderSim absEncoderSim;
 
-    private double m_zeroOffset = 0;
+    private double m_zeroOffset = Double.NaN;
 
     /**
      * Creates a new DoubleEncoder.s
@@ -21,15 +22,12 @@ public class DoubleEncoder {
      * @param absChannel   The DIO channel of the absolute encoder's PWM channel
      */
     public DoubleEncoder(int quadChannelA, int quadChannelB, int absChannel) {
-        quadEncoder = new Encoder(quadChannelA, quadChannelB, false, Encoder.EncodingType.k4X);
+        quadEncoder = new Encoder(quadChannelA, quadChannelB, true, Encoder.EncodingType.k4X);
         quadEncoderSim = new EncoderSim(quadEncoder);
         absEncoder = new DutyCycleEncoder(absChannel);
         absEncoderSim = new DutyCycleEncoderSim(absEncoder);
 
         quadEncoder.setDistancePerPulse(360.0 / 1024.0);
-        absEncoder.setDistancePerRotation(360.0);
-
-        reset();
     }
 
     /**
@@ -48,7 +46,8 @@ public class DoubleEncoder {
      * This is the offset between the absolute and quadrature encoders.
      */
     public void setZeroOffset() {
-        m_zeroOffset = quadEncoder.getDistance() - absEncoder.getDistance();
+        m_zeroOffset = quadEncoder.getDistance() - absEncoder.getAbsolutePosition() * 360.0;
+        DataLogManager.log(String.format("Set Zero Offset %f\n", m_zeroOffset));
     }
 
     /**
@@ -67,7 +66,7 @@ public class DoubleEncoder {
      * @return the angle in degrees
      */
     public double get() {
-        return -(quadEncoder.getDistance() - m_zeroOffset);
+        return quadEncoder.getDistance() - m_zeroOffset;
     }
 
     /**
@@ -86,5 +85,13 @@ public class DoubleEncoder {
      */
     public double getRawAbs() {
         return absEncoder.getAbsolutePosition();
+    }
+
+    public double getAbsDistance() {
+        return absEncoder.getAbsolutePosition() * 360.0;
+    }
+
+    public double getZeroOffset() {
+        return m_zeroOffset;
     }
 }
