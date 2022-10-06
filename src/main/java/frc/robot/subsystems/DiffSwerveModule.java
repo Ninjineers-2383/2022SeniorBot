@@ -198,8 +198,11 @@ public class DiffSwerveModule implements Sendable {
         m_wheelSpeed.append(m_driveSpeed);
         m_moduleAngleLog.append(m_moduleAngle);
 
-        if (i < 10) {
+        if (i == 100) {
             m_encoder.reset();
+        }
+
+        if (i <= 100) {
             i++;
         }
 
@@ -289,7 +292,7 @@ public class DiffSwerveModule implements Sendable {
         m_expectedSpeed.append(m_desiredSpeed);
         m_expectedAngle.append(m_desiredAngle);
 
-        m_turnOutput = m_turningPIDController.calculate((m_moduleAngle / 180.0 * Math.PI),
+        m_turnOutput = -m_turningPIDController.calculate((m_moduleAngle / 180.0 * Math.PI),
                 (m_desiredAngle / 180.0 * Math.PI));
         m_turnOutput = MathUtil.clamp(m_turnOutput, -Constants.ModuleConstants.kMaxTurnOutput,
                 Constants.ModuleConstants.kMaxTurnOutput);

@@ -35,7 +35,7 @@ public class LauncherSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Velocity", masterMotor.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("Shooter Target", masterMotor.getClosedLoopTarget());
+        // SmartDashboard.putNumber("Shooter Target", );
     }
 
     /**
@@ -44,10 +44,10 @@ public class LauncherSubsystem extends SubsystemBase {
      * @param velocity the velocity of the launcher
      */
     public void spin(double velocity) {
-        if (velocity == 0) {
+        if (velocity != 0) {
             masterMotor.setVoltage(pidController.calculate(getVelocity(), velocity) + ffController.calculate(velocity));
         } else {
-            masterMotor.set(ControlMode.Velocity, velocity);
+            masterMotor.set(ControlMode.PercentOutput, 0);
         }
     }
 
@@ -63,20 +63,22 @@ public class LauncherSubsystem extends SubsystemBase {
                 * Launcher.kWheelDiameterMeters * Math.PI;
     }
 
-    /**
-     * Determines whether or not the launcher is ready to receive a ball from the
-     * kicker
-     * 
-     * @return whether or not the launcher is ready
-     */
-    public boolean isReady() {
-        boolean ready = false;
-        if (masterMotor.getControlMode() == ControlMode.Velocity) {
-            ready = masterMotor.getSelectedSensorVelocity() >= masterMotor.getClosedLoopTarget() - Launcher.THRESHOLD
-                    && masterMotor.getSelectedSensorVelocity() <= masterMotor.getClosedLoopTarget()
-                            + Launcher.THRESHOLD;
-        }
-        SmartDashboard.putBoolean("Launcher Is Ready", ready);
-        return ready;
-    }
+    // /**
+    // * Determines whether or not the launcher is ready to receive a ball from the
+    // * kicker
+    // *
+    // * @return whether or not the launcher is ready
+    // */
+    // public boolean isReady() {
+    // boolean ready = false;
+    // if (masterMotor.getControlMode() == ControlMode.Velocity) {
+    // ready = masterMotor.getSelectedSensorVelocity() >=
+    // masterMotor.getClosedLoopTarget() - Launcher.THRESHOLD
+    // && masterMotor.getSelectedSensorVelocity() <=
+    // masterMotor.getClosedLoopTarget()
+    // + Launcher.THRESHOLD;
+    // }
+    // SmartDashboard.putBoolean("Launcher Is Ready", ready);
+    // return ready;
+    // }
 }

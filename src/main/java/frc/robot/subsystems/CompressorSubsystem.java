@@ -18,6 +18,7 @@ public class CompressorSubsystem extends SubsystemBase {
      */
     public CompressorSubsystem() {
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+        compressor.enableDigital();
     }
 
     /**
@@ -45,14 +46,14 @@ public class CompressorSubsystem extends SubsystemBase {
      * Disables the compressor
      */
     public void disableCompressor() {
-        compressor.disable();
+        // compressor.disable();
     }
 
     /**
      * Enables the compressor
      */
     public void enableCompressor() {
-        compressor.enableDigital();
+        // compressor.enableDigital();
     }
 
     /**

@@ -98,19 +98,19 @@ public final class Constants {
         public final static double kWheelDiameterMeters = 0.1016;
 
         // TODO: Change values
-        public final static double kP = 0.0001; 
+        public final static double kP = 0.071449;
         public final static double kI = 0.0;
         public final static double kD = 0.0;
 
-        public final static double kS = 0;
-        public final static double kV = 0;
-        public final static double kA = 0;
+        public final static double kS = 0.69125;
+        public final static double kV = 0.10837;
+        public final static double kA = 0.0032935;
     }
 
     public final static class Intake {
         // solenoid ports on pcm
-        public final static int LEFT_SOLENOID_PORT = 1;
-        public final static int RIGHT_SOLENOID_PORT = 0;
+        public final static int UP_SOLENOID_PORT = 1;
+        public final static int DOWN_SOLENOID_PORT = 0;
         public final static int INTAKE_PORT = 3;
     }
 

@@ -3,8 +3,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.CompressorCommand;
 
@@ -13,7 +14,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final VictorSPX intakeMotor;
 
     // creates two solenoid instances
-    private final Solenoid Solenoid;
+    private final DoubleSolenoid m_solenoid;
 
     // creates an instance of the compressor command
     private final CompressorCommand compressorCommand;
@@ -29,9 +30,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(CompressorSubsystem compressor, int motorPort, int upSolenoidPort, int downSolenoidPort) {
         this.compressorCommand = new CompressorCommand(compressor);
         intakeMotor = new VictorSPX(motorPort);
-        Solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, upSolenoidPort);
+        m_solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, upSolenoidPort, downSolenoidPort);
 
-        intakeMotor.setInverted(false);
+        intakeMotor.setInverted(true);
     }
 
     /**
@@ -40,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param power power of the intake motor from -1 to 1
      */
     public void setPower(Double power) {
-        intakeMotor.set(ControlMode.PercentOutput, power * (getDown() ? 0.2 : 1));
+        intakeMotor.set(ControlMode.PercentOutput, power);
     }
 
     /**
@@ -49,7 +50,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param down true sets the intake down, false sets the intake up
      */
     public void setDown(Boolean down) {
-        Solenoid.set(down);
+        m_solenoid.set(down ? Value.kReverse : Value.kForward);
         if (down) {
             compressorCommand.useCompressor();
         } else {
@@ -63,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return whether or not the intake is up
      */
     public boolean getUp() {
-        boolean front = !Solenoid.get();
+        boolean front = m_solenoid.get() == Value.kForward;
         return front;
     }
 
@@ -73,6 +74,6 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return whether or not the intake is down
      */
     public boolean getDown() {
-        return !Solenoid.get();
+        return m_solenoid.get() == Value.kReverse;
     }
 }
