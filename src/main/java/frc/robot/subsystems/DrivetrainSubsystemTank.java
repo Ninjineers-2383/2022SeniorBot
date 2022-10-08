@@ -34,12 +34,14 @@ public class DrivetrainSubsystemTank extends SubsystemBase {
 
 
     private final WPI_TalonFX leftMotor = new WPI_TalonFX(Constants.FrontLeftModule.kBottomMotorID);
-    private final WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.FrontRightModule.kBottomMotorID);
-
+    private final WPI_TalonFX leftFollowerMotor = new WPI_TalonFX(Constants.FrontLeftModule.kBottomMotorID);
+    private final WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.FrontRightModule.kTopMotorID);
+    private final WPI_TalonFX rightFollowerMotor = new WPI_TalonFX(Constants.FrontRightModule.kTopMotorID);
     private final DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor);
 
     public DrivetrainSubsystemTank() {
-        
+        leftFollowerMotor.follow(leftMotor);
+        rightFollowerMotor.follow(rightMotor);
     }
 
     @Override
