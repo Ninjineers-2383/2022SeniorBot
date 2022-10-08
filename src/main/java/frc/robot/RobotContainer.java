@@ -21,6 +21,7 @@ import frc.robot.commands.LauncherCommand;
 import frc.robot.commands.LimelightDriveCommand;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystemTank;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
@@ -46,8 +47,8 @@ public class RobotContainer {
         private final JoystickButton m_LimelightDriveButton = new JoystickButton(m_operatorController,
                         XboxController.Button.kX.value);
 
-        private final JoystickButton m_fuck = new JoystickButton(m_driverMoveController, 0);
-        private final JoystickButton m_suck = new JoystickButton(m_driverTurnController, 0);
+        private final JoystickButton m_limelightAimRightNut = new JoystickButton(m_driverMoveController, 0);
+        private final JoystickButton m_limelightAimLeftNut = new JoystickButton(m_driverTurnController, 0);
 
         // Power and suppliers are defined here
         private final DoubleSupplier m_driveX = () -> m_driverMoveController.getX();
@@ -65,7 +66,7 @@ public class RobotContainer {
         private final BooleanSupplier m_fieldCentric = () -> false;
 
         // The robot's subsystems and commands are defined here...
-        private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(DataLogManager.getLog());
+        private final DrivetrainSubsystemTank m_drivetrainSubsystem = new DrivetrainSubsystemTank();
         private final CompressorSubsystem m_compressorSubsystem = new CompressorSubsystem();
         private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_compressorSubsystem,
                         Constants.Intake.INTAKE_PORT,
@@ -81,7 +82,7 @@ public class RobotContainer {
                         () -> m_intakePower.getAsBoolean() ? true : m_outtakePower.getAsBoolean() ? true : false);
 
         private final LimelightDriveCommand m_limelightDriveCommand = new LimelightDriveCommand(m_drivetrainSubsystem,
-                        m_limelight, m_driveX, m_driveY, m_fieldCentric);
+                        m_limelight);
         private final KickerCommand m_dKickerCommand = new KickerCommand(m_kickerSubsystem, m_kickerPower);
         private final LauncherCommand m_dLauncherCommand = new LauncherCommand(m_launcherSubsystem,
                         () -> SmartDashboard.getNumber("Set Launcher Velocity", 0), () -> true);
@@ -105,13 +106,12 @@ public class RobotContainer {
         private void configureButtonBindings() {
                 m_flywheelButton.whenHeld(new LauncherCommand(m_launcherSubsystem, () -> 50, () -> true));
                 m_LimelightDriveButton.toggleWhenPressed(m_limelightDriveCommand);
-                m_fuck.or(m_suck).whileActiveOnce(m_limelightDriveCommand);
+                m_limelightAimRightNut.or(m_limelightAimLeftNut).whileActiveOnce(m_limelightDriveCommand);
         }
 
         private void configureDefaultCommands() {
                 m_drivetrainSubsystem.setDefaultCommand(m_dDriveCommand);
                 m_intakeSubsystem.setDefaultCommand(m_dIntakeCommand);
-                // m_chimneySubsystem.setDefaultCommand(m_dChimneyCommand);
                 m_kickerSubsystem.setDefaultCommand(m_dKickerCommand);
                 m_launcherSubsystem.setDefaultCommand(m_dLauncherCommand);
         }

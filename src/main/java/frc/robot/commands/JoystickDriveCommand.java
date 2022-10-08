@@ -9,9 +9,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.helpers.ThrottleSoftener;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystemTank;
 
 public class JoystickDriveCommand extends CommandBase {
-    private final DrivetrainSubsystem m_drivetrain;
+    private final DrivetrainSubsystemTank m_drivetrain;
 
     private final DoubleSupplier m_x;
     private final DoubleSupplier m_y;
@@ -22,7 +23,7 @@ public class JoystickDriveCommand extends CommandBase {
     private final SlewRateLimiter m_yRateLimiter = new SlewRateLimiter(10);
     private final SlewRateLimiter m_oRateLimiter = new SlewRateLimiter(10);
 
-    public JoystickDriveCommand(DrivetrainSubsystem drivetrain, DoubleSupplier xInput, DoubleSupplier yInput,
+    public JoystickDriveCommand(DrivetrainSubsystemTank drivetrain, DoubleSupplier xInput, DoubleSupplier yInput,
             DoubleSupplier rotationInput, BooleanSupplier fieldRelative) {
         m_drivetrain = drivetrain;
 
@@ -41,11 +42,7 @@ public class JoystickDriveCommand extends CommandBase {
         double omega = -ThrottleSoftener.soften(MathUtil.applyDeadband(m_omega.getAsDouble(), 0.1))
                 * DriveConstants.kMaxAngularSpeed;
 
-        m_drivetrain.drive(
-                m_xRateLimiter.calculate(-y),
-                m_yRateLimiter.calculate(x),
-                m_oRateLimiter.calculate(omega),
-                m_fieldRelative.getAsBoolean());
+        m_drivetrain.drive(x, omega);
     }
 
     @Override
