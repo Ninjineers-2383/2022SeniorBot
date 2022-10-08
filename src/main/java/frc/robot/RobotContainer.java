@@ -46,15 +46,15 @@ public class RobotContainer {
         private final JoystickButton m_LimelightDriveButton = new JoystickButton(m_operatorController,
                         XboxController.Button.kX.value);
 
-        private final JoystickButton m_fuck = new JoystickButton(m_driverMoveController, 0);
-        private final JoystickButton m_suck = new JoystickButton(m_driverTurnController, 0);
+        private final JoystickButton m_fuck = new JoystickButton(m_driverMoveController, 1);
+        private final JoystickButton m_suck = new JoystickButton(m_driverTurnController, 1);
 
         // Power and suppliers are defined here
         private final DoubleSupplier m_driveX = () -> m_driverMoveController.getX();
         private final DoubleSupplier m_driveY = () -> m_driverMoveController.getY();
         private final DoubleSupplier m_driveOmega = () -> m_driverTurnController.getX();
         private final BooleanSupplier m_intakePower = () -> m_operatorController.getLeftTriggerAxis() > 0.5;
-        private final BooleanSupplier m_outtakePower = () -> m_driverTurnController.getTrigger();
+        private final BooleanSupplier m_outtakePower = () -> m_operatorController.getLeftTriggerAxis() > 0.5;
 
         private final DoubleSupplier m_kickerPower = () -> m_operatorController.getYButton() ? -1
                         : m_operatorController.getAButton() ? 1 : 0;
