@@ -14,15 +14,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.Intake;
-import frc.robot.Constants.Launcher;
-import frc.robot.commands.ChimneyCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.KickerCommand;
 import frc.robot.commands.LauncherCommand;
 import frc.robot.commands.LimelightDriveCommand;
-import frc.robot.subsystems.ChimneySubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -50,6 +46,9 @@ public class RobotContainer {
         private final JoystickButton m_LimelightDriveButton = new JoystickButton(m_operatorController,
                         XboxController.Button.kX.value);
 
+        private final JoystickButton m_fuck = new JoystickButton(m_driverMoveController, 0);
+        private final JoystickButton m_suck = new JoystickButton(m_driverTurnController, 0);
+
         // Power and suppliers are defined here
         private final DoubleSupplier m_driveX = () -> m_driverMoveController.getX();
         private final DoubleSupplier m_driveY = () -> m_driverMoveController.getY();
@@ -71,7 +70,6 @@ public class RobotContainer {
         private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_compressorSubsystem,
                         Constants.Intake.INTAKE_PORT,
                         Constants.Intake.UP_SOLENOID_PORT, Constants.Intake.DOWN_SOLENOID_PORT);
-        // private final ChimneySubsystem m_chimneySubsystem = new ChimneySubsystem();
         private final KickerSubsystem m_kickerSubsystem = new KickerSubsystem();
         private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
         private final LimelightSubsystem m_limelight = new LimelightSubsystem();
@@ -81,10 +79,7 @@ public class RobotContainer {
         private final IntakeCommand m_dIntakeCommand = new IntakeCommand(m_intakeSubsystem,
                         () -> m_intakePower.getAsBoolean() ? 1 : m_outtakePower.getAsBoolean() ? -1 : 0,
                         () -> m_intakePower.getAsBoolean() ? true : m_outtakePower.getAsBoolean() ? true : false);
-        // private final ChimneyCommand m_dChimneyCommand = new
-        // ChimneyCommand(m_chimneySubsystem,
-        // () -> m_intakePower.getAsBoolean() ? 0.8 : m_outtakePower.getAsBoolean() ?
-        // -0.8 : 0);
+
         private final LimelightDriveCommand m_limelightDriveCommand = new LimelightDriveCommand(m_drivetrainSubsystem,
                         m_limelight, m_driveX, m_driveY, m_fieldCentric);
         private final KickerCommand m_dKickerCommand = new KickerCommand(m_kickerSubsystem, m_kickerPower);
@@ -110,6 +105,7 @@ public class RobotContainer {
         private void configureButtonBindings() {
                 m_flywheelButton.whenHeld(new LauncherCommand(m_launcherSubsystem, () -> 50, () -> true));
                 m_LimelightDriveButton.toggleWhenPressed(m_limelightDriveCommand);
+                m_fuck.or(m_suck).whileActiveOnce(m_limelightDriveCommand);
         }
 
         private void configureDefaultCommands() {
