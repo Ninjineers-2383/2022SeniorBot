@@ -19,6 +19,8 @@ import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.KickerCommand;
 import frc.robot.commands.LauncherCommand;
 import frc.robot.commands.LimelightDriveCommand;
+import frc.robot.commands.Sequences.DoubleShotSequence;
+
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -43,8 +45,8 @@ public class RobotContainer {
 
         private final JoystickButton m_flywheelButton = new JoystickButton(m_operatorController,
                         XboxController.Button.kB.value);
-        private final JoystickButton m_LimelightDriveButton = new JoystickButton(m_operatorController,
-                        XboxController.Button.kX.value);
+        private final JoystickButton m_doubleShotButton = new JoystickButton(m_operatorController,
+                        XboxController.Button.kLeftBumper.value);
 
         private final JoystickButton m_rightNut = new JoystickButton(m_driverMoveController, 1);
         private final JoystickButton m_leftNut = new JoystickButton(m_driverTurnController, 1);
@@ -53,8 +55,8 @@ public class RobotContainer {
         private final DoubleSupplier m_driveX = () -> m_driverMoveController.getX();
         private final DoubleSupplier m_driveY = () -> m_driverMoveController.getY();
         private final DoubleSupplier m_driveOmega = () -> m_driverTurnController.getX();
-        private final BooleanSupplier m_intakePower = () -> m_operatorController.getLeftTriggerAxis() > 0.5;
-        private final BooleanSupplier m_outtakePower = () -> m_operatorController.getLeftTriggerAxis() > 0.5;
+        private final BooleanSupplier m_intakePower = () -> m_operatorController.getLeftTriggerAxis() > 0.4;
+        private final BooleanSupplier m_outtakePower = () -> m_operatorController.getRightTriggerAxis() > 0.4;
 
         private final DoubleSupplier m_kickerPower = () -> m_operatorController.getYButton() ? -1
                         : m_operatorController.getAButton() ? 1 : 0;
@@ -85,7 +87,7 @@ public class RobotContainer {
         private final KickerCommand m_dKickerCommand = new KickerCommand(m_kickerSubsystem, m_kickerPower);
         private final LauncherCommand m_dLauncherCommand = new LauncherCommand(m_launcherSubsystem,
                         () -> SmartDashboard.getNumber("Set Launcher Velocity", 0), () -> true);
-
+        private final DoubleShotSequence m_doubleShotSequence = new DoubleShotSequence(m_kickerSubsystem, m_intakeSubsystem, m_launcherSubsystem, m_limelight);
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
@@ -104,8 +106,8 @@ public class RobotContainer {
 
         private void configureButtonBindings() {
                 m_flywheelButton.whenHeld(new LauncherCommand(m_launcherSubsystem, () -> 50, () -> true));
-                m_LimelightDriveButton.toggleWhenPressed(m_limelightDriveCommand);
                 m_rightNut.or(m_leftNut).whileActiveOnce(m_limelightDriveCommand);
+                m_doubleShotButton.whenHeld(m_doubleShotSequence);
         }
 
         private void configureDefaultCommands() {
