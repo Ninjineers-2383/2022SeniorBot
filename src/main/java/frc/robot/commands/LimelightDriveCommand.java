@@ -36,7 +36,7 @@ public class LimelightDriveCommand extends CommandBase {
         double x = -ThrottleSoftener.soften(MathUtil.applyDeadband(m_x.getAsDouble(), 0.1)) * DriveConstants.kMaxSpeed;
         double y = -ThrottleSoftener.soften(MathUtil.applyDeadband(m_y.getAsDouble(), 0.1)) * DriveConstants.kMaxSpeed;
         double omega = MathUtil.clamp(
-                (m_limelight.getX() * Math.PI / 180.0) * Constants.LimelightDrive.TURN_SPEED_AMPLIFIER,
+                (m_limelight.getX() * Math.PI / 180.0) * Constants.LimelightDrive.kP,
                 -Constants.LimelightDrive.MAX_OUTPUT, Constants.LimelightDrive.MAX_OUTPUT);
 
         m_drivetrain.drive(-y, x, omega, m_fieldRelative.getAsBoolean());

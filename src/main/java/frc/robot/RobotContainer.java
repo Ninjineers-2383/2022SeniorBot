@@ -19,8 +19,8 @@ import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.KickerCommand;
 import frc.robot.commands.LauncherCommand;
 import frc.robot.commands.LimelightDriveCommand;
-import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
@@ -46,8 +46,8 @@ public class RobotContainer {
         private final JoystickButton m_LimelightDriveButton = new JoystickButton(m_operatorController,
                         XboxController.Button.kX.value);
 
-        private final JoystickButton m_fuck = new JoystickButton(m_driverMoveController, 1);
-        private final JoystickButton m_suck = new JoystickButton(m_driverTurnController, 1);
+        private final JoystickButton m_rightNut = new JoystickButton(m_driverMoveController, 1);
+        private final JoystickButton m_leftNut = new JoystickButton(m_driverTurnController, 1);
 
         // Power and suppliers are defined here
         private final DoubleSupplier m_driveX = () -> m_driverMoveController.getX();
@@ -105,13 +105,12 @@ public class RobotContainer {
         private void configureButtonBindings() {
                 m_flywheelButton.whenHeld(new LauncherCommand(m_launcherSubsystem, () -> 50, () -> true));
                 m_LimelightDriveButton.toggleWhenPressed(m_limelightDriveCommand);
-                m_fuck.or(m_suck).whileActiveOnce(m_limelightDriveCommand);
+                m_rightNut.or(m_leftNut).whileActiveOnce(m_limelightDriveCommand);
         }
 
         private void configureDefaultCommands() {
                 m_drivetrainSubsystem.setDefaultCommand(m_dDriveCommand);
                 m_intakeSubsystem.setDefaultCommand(m_dIntakeCommand);
-                // m_chimneySubsystem.setDefaultCommand(m_dChimneyCommand);
                 m_kickerSubsystem.setDefaultCommand(m_dKickerCommand);
                 m_launcherSubsystem.setDefaultCommand(m_dLauncherCommand);
         }
