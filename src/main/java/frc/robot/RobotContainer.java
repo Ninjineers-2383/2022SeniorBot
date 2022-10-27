@@ -20,6 +20,7 @@ import frc.robot.commands.KickerCommand;
 import frc.robot.commands.LauncherCommand;
 import frc.robot.commands.LimelightDriveCommand;
 import frc.robot.commands.Sequences.DoubleShotSequence;
+import frc.robot.commands.Triggers.AutoShoot;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
@@ -38,16 +39,15 @@ import frc.robot.subsystems.LimelightSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
         // The controls are defined here
         private final Joystick m_driverMoveController = new Joystick(0);
         private final Joystick m_driverTurnController = new Joystick(1);
         private final XboxController m_operatorController = new XboxController(2);
-
         private final JoystickButton m_flywheelButton = new JoystickButton(m_operatorController,
                         XboxController.Button.kB.value);
         private final JoystickButton m_doubleShotButton = new JoystickButton(m_operatorController,
                         XboxController.Button.kLeftBumper.value);
-
         private final JoystickButton m_rightNut = new JoystickButton(m_driverMoveController, 1);
         private final JoystickButton m_leftNut = new JoystickButton(m_driverTurnController, 1);
 
@@ -57,16 +57,11 @@ public class RobotContainer {
         private final DoubleSupplier m_driveOmega = () -> m_driverTurnController.getX();
         private final BooleanSupplier m_intakePower = () -> m_operatorController.getLeftTriggerAxis() > 0.4;
         private final BooleanSupplier m_outtakePower = () -> m_operatorController.getRightTriggerAxis() > 0.4;
-
         private final DoubleSupplier m_kickerPower = () -> m_operatorController.getYButton() ? -1
                         : m_operatorController.getAButton() ? 1 : 0;
-
-        // private final BooleanSupplier m_fieldCentric = () ->
-        // !(m_driverMoveController.getTrigger()
-        // || m_driverTurnController.getTrigger());
         private final BooleanSupplier m_fieldCentric = () -> false;
 
-        // The robot's subsystems and commands are defined here...
+        // Subsystem instantiation
         private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(DataLogManager.getLog());
         private final CompressorSubsystem m_compressorSubsystem = new CompressorSubsystem();
         private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_compressorSubsystem,
@@ -76,18 +71,22 @@ public class RobotContainer {
         private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
         private final LimelightSubsystem m_limelight = new LimelightSubsystem();
 
+        // Command instantiation 
         private final JoystickDriveCommand m_dDriveCommand = new JoystickDriveCommand(m_drivetrainSubsystem, m_driveX,
                         m_driveY, m_driveOmega, m_fieldCentric);
         private final IntakeCommand m_dIntakeCommand = new IntakeCommand(m_intakeSubsystem,
                         () -> m_intakePower.getAsBoolean() ? 1 : m_outtakePower.getAsBoolean() ? -1 : 0,
                         () -> m_intakePower.getAsBoolean() ? true : m_outtakePower.getAsBoolean() ? true : false);
-
         private final LimelightDriveCommand m_limelightDriveCommand = new LimelightDriveCommand(m_drivetrainSubsystem,
                         m_limelight, m_driveX, m_driveY, m_fieldCentric);
         private final KickerCommand m_dKickerCommand = new KickerCommand(m_kickerSubsystem, m_kickerPower);
         private final LauncherCommand m_dLauncherCommand = new LauncherCommand(m_launcherSubsystem,
                         () -> SmartDashboard.getNumber("Set Launcher Velocity", 0), () -> true);
+
+        // Custom commands and sequences
         private final DoubleShotSequence m_doubleShotSequence = new DoubleShotSequence(m_kickerSubsystem, m_intakeSubsystem, m_launcherSubsystem, m_limelight);
+        private final AutoShoot m_autoshoot = new AutoShoot(() -> m_limelight.getLockedOn());
+
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
@@ -95,6 +94,7 @@ public class RobotContainer {
                 // Configure the button bindings
                 configureButtonBindings();
                 configureDefaultCommands();
+                configureOtherCommands();
 
                 SmartDashboard.putNumber("Set Launcher Velocity", 0);
 
@@ -105,16 +105,25 @@ public class RobotContainer {
         }
 
         private void configureButtonBindings() {
+                // Binding buttons to specific commands
                 m_flywheelButton.whenHeld(new LauncherCommand(m_launcherSubsystem, () -> 50, () -> true));
                 m_rightNut.or(m_leftNut).whileActiveOnce(m_limelightDriveCommand);
                 m_doubleShotButton.whenHeld(m_doubleShotSequence);
         }
 
         private void configureDefaultCommands() {
+                // Setting default commands
                 m_drivetrainSubsystem.setDefaultCommand(m_dDriveCommand);
                 m_intakeSubsystem.setDefaultCommand(m_dIntakeCommand);
                 m_kickerSubsystem.setDefaultCommand(m_dKickerCommand);
                 m_launcherSubsystem.setDefaultCommand(m_dLauncherCommand);
+        }
+
+        private void configureOtherCommands() {
+                // Configuring other commands and triggers
+                m_autoshoot.whenActive(
+                        new DoubleShotSequence(m_kickerSubsystem, m_intakeSubsystem, m_launcherSubsystem, m_limelight).withTimeout(1.5)
+                );
         }
 
         /**

@@ -48,8 +48,14 @@ public class LimelightSubsystem extends SubsystemBase {
             PhotonTrackedTarget bestTarget = res.getBestTarget();
             targetX = bestTarget.getYaw();
             targetY = bestTarget.getPitch();
+            if (Math.abs(targetX) < 1) {
+                lockedOn = true;
+            } else {
+                lockedOn = false;
+            }
         } else {
             targetVisible = false;
+            lockedOn = false;
         }
 
         // post to smart dashboard

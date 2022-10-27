@@ -123,7 +123,7 @@ public final class Constants {
     }
 
     public final static class LimelightDrive {
-
+        
         public final static double MAX_OUTPUT = 4.0; // 4 Radians per second max turning rate
         public final static double kP = 0.1; // Multiplier on the X angle of the target
     }

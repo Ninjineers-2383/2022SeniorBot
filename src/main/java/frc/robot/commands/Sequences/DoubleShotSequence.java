@@ -28,6 +28,6 @@ public class DoubleShotSequence extends SequentialCommandGroup {
                         new IntakeCommand(intake, () -> 0.8, () -> false),
                         deadline(new LauncherCommand(launcher,
                                 () -> 48,
-                                () -> true).withTimeout(1.5))));
+                                () -> true).withTimeout(1.2))));
     }
 }
