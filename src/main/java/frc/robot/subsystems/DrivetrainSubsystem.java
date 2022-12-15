@@ -91,9 +91,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_odometry.update(getHeading(), m_lastStates[0], m_lastStates[1], m_lastStates[2]);
 
-        SmartDashboard.putNumber("Robot Heading", m_currentYaw);
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-
         m_field.setRobotPose(m_odometry.getPoseMeters());
 
         if (RobotController.getUserButton() && m_counter == 0) {

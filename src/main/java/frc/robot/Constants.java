@@ -6,8 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 /**
  * Note: Translations calculated with the formula graphed here
@@ -20,12 +18,6 @@ public final class Constants {
     public static final class DriveConstants {
         public static final double kMaxSpeed = 5.0; // meters per second
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
-        public static final double kMaxAcceleration = 3; //meters per second squared
-
-        public static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-            Constants.FrontLeftModule.translation,
-            Constants.FrontRightModule.translation,
-            Constants.RearModule.translation);
     }
 
     public static final class ModuleConstants {
@@ -56,20 +48,6 @@ public final class Constants {
         public final static double kMaxAngularAcceleration = Math.PI * 2 * 100;
 
         public final static double kTrackWidthMeters = 0.6173724;
-    }
-
-    public static final class AutoConstants {
-        public static final double kPXController = 1.5;
-        public static final double kPYController = 1.5;
-        public static final double kPThetaController = 3;
-
-        public final static double kMaxAngularVelocity = Math.PI * 100;
-        public final static double kMaxAngularAcceleration = Math.PI * 2 * 100;
-
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
-            new TrapezoidProfile.Constraints(
-                kMaxAngularVelocity,
-                kMaxAngularAcceleration);
     }
 
     public static final class FrontLeftModule {
